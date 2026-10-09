@@ -1,0 +1,545 @@
+{
+  "info": {
+    "_postman_id": "53e97189-8de2-4aaa-9083-2700059eb355",
+    "name": "Events",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "20830465"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST_REGISTER",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\" : \"tata\",\r\n    \"password\" : \"toto\",\r\n    \"email\" : \"tata@exemple.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/auth/register",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST_LOGIN",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const body = pm.response.json();\r",
+                  "const token = body.token;\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"TOKEN\", token);\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"Theo\",\r\n    \"password\" : \"toto\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/auth/login",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "GET_ALL",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/users",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET_BY_ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/users/1",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST_USER",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\" : \"tutu\",\r\n    \"password\" : \"tutu\",\r\n    \"email\" : \"tutu@exemple.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/users",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH_USER",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\":\"tutuuuuuuu\",\r\n    \"email\":\"tutu@exemple.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/users/24",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "users",
+                "24"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE_USER",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/users/24",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "users",
+                "24"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "GET_ALL",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/events",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "events"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET_BY_ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/events/11",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "events",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST_EVENT",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\":\"Concert au parc 2\",\r\n    \"description\":\"Une soiree musicale en plein air avec des groupes locaux.\",\r\n    \"date\":\"2026-08-31T22:00:00.000Z\",\r\n    \"location\":\"Parc de la Villette, Parisss\",\r\n    \"owner\":1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/events",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "events"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH_EVENT",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"title\":\"Concert au parc 2\",\r\n    \"description\":\"Une soiree musicale en plein air avec des groupes locaux.\",\r\n    \"date\":\"2026-08-31T22:00:00.000Z\",\r\n    \"location\":\"Parc de la Villette, Paris\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/events/11",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "events",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE_EVENT",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/events/11",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "events",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Participants",
+      "item": [
+        {
+          "name": "GET_ALL",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/participants",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "participants"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET_BY_USER",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/participants/user/1",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "participants",
+                "user",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET_BY_EVENT",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/participants/event/2",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "participants",
+                "event",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST_PARTICIPANT",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"user\" : 1,\r\n    \"event\" : 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/participants",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "participants"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE_PARTICIPANT",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/participants/1/1",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "participants",
+                "1",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "GET_ALL",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/comments",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET_BY_ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/comments/11",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "comments",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST_COMMENT",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"comment\":\"Ceci est un commentaire via POSTMAN\",\r\n    \"user\":1,\r\n    \"event\":1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/comments",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH_COMMENT",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"comment\" : \"Ceci est un commentaire MODIFIER via POSTMAN\"\r\n}DE",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/comments/11",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "comments",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE_COMMENT",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/comments/11",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "comments",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{TOKEN}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "URL",
+      "value": "http://127.0.0.1:3000",
+      "type": "string"
+    },
+    {
+      "key": "TOKEN",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
