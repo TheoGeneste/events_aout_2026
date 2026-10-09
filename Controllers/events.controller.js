@@ -1,4 +1,6 @@
 import eventModel from '../Models/events.model.js'
+import commentModel from '../Models/comments.model.js'
+import usersModel from '../Models/users.model.js'
 
 async function getAll(req, res) {
     try {
@@ -15,6 +17,10 @@ async function getById(req, res) {
         if (!event) {
             return res.status(404).json({ error: "L'event n'existe pas !" })
         }
+        const comments = await commentModel.getByEventId(id);
+        const participants = await usersModel.getByEventId(id);
+        event.comments = comments;
+        event.participants = participants;
         res.json(event);
     } catch (error) {
         res.status(500).json({ error: "Une erreur est survenue lors de la récupération de l'event !" })

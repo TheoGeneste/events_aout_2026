@@ -1,7 +1,9 @@
 import Db from '../Config/db.js'
 
 async function getAll() {
-    const [rows] = await Db.query("SELECT ev_id, ev_title, ev_description, ev_date, ev_location, ev_owner FROM events");
+    const [rows] = await Db.query(`SELECT ev_id, ev_title, ev_description, ev_date, ev_location, ev_owner, us_username 
+        FROM events
+        INNER JOIN users ON us_id = ev_owner`);
     return rows;
 }
 
@@ -16,7 +18,7 @@ async function insert(event) {
     return inserted;
 }
 
-async function update(id,event) {
+async function update(id, event) {
     const inserted = await Db.query("UPDATE events set ev_title = ?, ev_description = ?, ev_date = ?, ev_location = ? WHERE ev_id = ?",
         [event.ev_title, event.ev_description, event.ev_date, event.ev_location, id]);
     return inserted;
@@ -24,14 +26,23 @@ async function update(id,event) {
 
 
 async function deleteevent(id) {
-    const deleted = await Db.query("DELETE FROM events WHERE ev_id = ?",[id]);
+    const deleted = await Db.query("DELETE FROM events WHERE ev_id = ?", [id]);
     return deleted;
 }
 
+async function getByUserId(userId) {
+    const [rows] = await Db.query(`SELECT ev_id, ev_title, ev_description, ev_date, ev_location, ev_owner  
+        FROM users
+        INNER JOIN participants ON us_id = pa_user
+        INNER JOIN events ON ev_id = pa_event 
+        WHERE us_id = ?;`, [userId]);
+    return rows;
+}
 export default {
     getAll,
     getById,
     insert,
     update,
-    deleteevent
+    deleteevent,
+    getByUserId
 }

@@ -1,4 +1,6 @@
 import userModel from "../Models/users.model.js";
+import commentModel from '../Models/comments.model.js'
+import eventModel from '../Models/events.model.js'
 import bcrypt from 'bcrypt';
 
 async function getAll(req, res) {
@@ -17,6 +19,12 @@ async function getById(req, res) {
         if (!user) {
             return res.status(404).json({ erreur: "Le user n'existe pas" });
         }
+        // Je vais chercher tout les évenement ou ce user participe 
+        const events = await eventModel.getByUserId(id);
+        // Je vais chercher tout les commentaire écrit par ce user 
+        const comments = await commentModel.getByUserId(id);
+        user.comments = comments;
+        user.events = events;
         res.json(user);
     } catch (error) {
         res.status(500).json({ error: "Une erreur est survenue lors de la récupération du user" })

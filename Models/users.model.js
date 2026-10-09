@@ -32,11 +32,20 @@ async function update(id, user) {
     return updated;
 }
 
+async function getByEventId(eventId) {
+    const [rows] = await Db.query(`SELECT us_id, us_username, us_email
+        FROM users
+        INNER JOIN participants ON pa_user = us_id
+        WHERE pa_event = ?`, [eventId])
+    return rows;
+}
+
 export default {
     getAll,
     getById,
     update,
     deleteUser,
     insert,
-    getByUsername
+    getByUsername,
+    getByEventId
 }
