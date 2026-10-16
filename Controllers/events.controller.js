@@ -10,6 +10,7 @@ async function getAll(req, res) {
         res.status(500).json({ error: "Une erreur est survenue lors de la récupération des events !" })
     }
 }
+
 async function getById(req, res) {
     try {
         const id = req.params.id;

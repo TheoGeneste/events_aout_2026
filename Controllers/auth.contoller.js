@@ -23,19 +23,19 @@ async function login(req, res) {
     try {
         const body = req.body;
         if (!body.username || !body.password) {
-            res.status(403).json({ error: "Identifiants incorrect" });
+            return res.status(403).json({ error: "Identifiants incorrect" });
         }
 
         const user = await userModel.getByUsername(body.username);
 
         if(!user){
-            res.status(403).json({ error: "Identifiants incorrect" });
+            return res.status(403).json({ error: "Identifiants incorrect" });
         }
 
         const passwordVerify = bcrypt.compareSync(body.password, user.us_password);
 
         if (!passwordVerify) {
-            res.status(403).json({ error: "Identifiants incorrect" });
+            return res.status(403).json({ error: "Identifiants incorrect" });
         }
 
         const token = jwt.sign({
