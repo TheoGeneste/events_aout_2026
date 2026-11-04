@@ -1,3 +1,19 @@
+/*
+ * Controllers/comments.controller.js — gestion des commentaires
+ * --------------------------------------------------------------
+ * Routes (derrière le token) :
+ *   GET    /comments      tous les commentaires
+ *   GET    /comments/:id  un commentaire
+ *   POST   /comments      en ajouter un
+ *   PATCH  /comments/:id  modifier le texte
+ *   DELETE /comments/:id  le supprimer
+ *
+ * Exemple de création :
+ *   POST /comments
+ *   { "comment": "J'ai adoré !", "user": 2, "event": 5 }
+ *   → user = us_id de l'auteur, event = ev_id de l'événement
+ */
+
 import commentModel from '../Models/comments.model.js'
 
 async function getAll(req, res) {
@@ -8,6 +24,8 @@ async function getAll(req, res) {
         res.status(500).json({ error: "Une erreur est survenue lors de la récupération des comments !" })
     }
 }
+
+// GET /comments/:id — 404 si aucune ligne ne correspond à cet id
 async function getById(req, res) {
     try {
         const id = req.params.id;
@@ -20,6 +38,12 @@ async function getById(req, res) {
         res.status(500).json({ error: "Une erreur est survenue lors de la récupération du comment !" })
     }
 }
+
+/*
+ * PATCH /comments/:id
+ * Seul le texte peut changer : { "comment": "Nouveau texte" }
+ * Si body.comment est vide, on ne touche pas co_comment et on réécrit l'ancien.
+ */
 async function update(req, res) {
     try {
         const id = req.params.id;
@@ -38,6 +62,8 @@ async function update(req, res) {
         res.status(500).json({ error: "Une erreur est survenue lors de la modification du comment !" })
     }
 }
+
+// POST /comments — le texte est obligatoire. user et event viennent du body.
 async function insert(req, res) {
     try {
         const body = req.body;
@@ -50,6 +76,8 @@ async function insert(req, res) {
         res.status(500).json({ error: "Une erreur est survenue lors de l'insertion du comment !" })
     }
 }
+
+// DELETE /comments/:id
 async function deleteComment(req, res) {
     try {
         const id = req.params.id;
