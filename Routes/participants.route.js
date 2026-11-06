@@ -29,6 +29,6 @@ router.get("/event/:eventID", participantController.getByEventID);
 
 router.post("/", participantController.insert);
 
-router.delete("/:userID/:eventID", participantController.deleteParticipant);
+router.delete("/:eventID", participantController.deleteParticipant);
 
 export default router;

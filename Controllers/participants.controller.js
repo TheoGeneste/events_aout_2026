@@ -57,10 +57,10 @@ async function getByEventID(req, res) {
 async function insert(req, res) {
     try {
         const body = req.body;
-        if(!body.user || !body.event){
+        if(!req.user || !body.event){
             return res.status(403).json({error : "Tout les champs sont obligatoires !"})
         }
-        const inserted = await participantModel.insert(body);
+        const inserted = await participantModel.insert({user : req.user.us_id, event : body.event});
         res.status(201).json({message : "Votre insertion à bien été effectué", participant : body})
     } catch (error) {
         res.status(500).json({ error: "Une erreur est survenur lors de l'insertion du participant" })
@@ -76,7 +76,7 @@ async function insert(req, res) {
  */
 async function deleteParticipant(req, res) {
     try {
-        const userID = req.params.userID;
+        const userID = req.user.us_id;
         const eventID = req.params.eventID;
         const deleted = await participantModel.deleteParticipant(userID, eventID);
         res.json({message : "Votre suppression à bien été effectué", participant : {user : userID, event :eventID}})
