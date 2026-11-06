@@ -70,6 +70,7 @@ async function insert(req, res) {
         if (!body.comment) {
             res.status(403).json({ error: "Le commentaire est obligatoire" })
         }
+        body.user = req.user.us_id;
         const inserted = await commentModel.insert(body);
         res.status(201).json({ message: "Votre insertion à bien été effectué", comment: body });
     } catch (error) {
