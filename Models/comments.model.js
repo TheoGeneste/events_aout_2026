@@ -20,7 +20,7 @@ async function getAll() {
 
 // Un commentaire par son id. undefined si l'id n'existe pas.
 async function getById(id) {
-    const [rows] = await Db.query("SELECT co_id, co_comment, co_user, co_event FROM comments WHERE co_id = ?", [id]);
+    const [rows] = await Db.query("SELECT co_id, co_comment, co_user, co_event, us_username FROM comments INNER JOIN users ON comments.co_user = users.us_id WHERE co_id = ?", [id]);
     return rows[0];
 }
 
@@ -62,9 +62,10 @@ async function getByEventId(eventId) {
     // DEPUIS LA TABLE COMMENTS
     // JE JOINS LA TABLE EVENTS (comments.co_event = events.ev_id)
     // OU ev_id = l'événement demandé
-    const [rows] = await Db.query(`SELECT co_comment, co_id, co_user
+    const [rows] = await Db.query(`SELECT co_comment, co_id, co_user, us_username
         FROM comments 
         INNER JOIN events ON events.ev_id = comments.co_event 
+        INNER JOIN users ON users.us_id = comments.co_user
         WHERE ev_id = ?`, [eventId]);
     return rows;
 }
