@@ -89,4 +89,18 @@ async function eventConfirm(receverEmail, eventName, eventDate, eventLocation) {
     console.log("mail sent successfully");
     return mail;
 }
-export default { resetPassword, welcome, eventConfirm };
+
+async function rappelEvent(receverEmail, eventName, eventDate, eventLocation){
+    const mail = await tranporter.sendMail({
+        from: process.env.MAIL_FROM,
+        to: receverEmail,
+        subject: 'Rappel de votre événement',
+        text: `Rappel de votre événement ${eventName} le ${eventDate} à ${eventLocation}`,
+        html: `
+        <p>Rappel de votre événement ${eventName} le ${eventDate} à ${eventLocation}</p>
+        `,
+    });
+    console.log("mail sent successfully");
+    return mail;
+}
+export default { resetPassword, welcome, eventConfirm, rappelEvent };

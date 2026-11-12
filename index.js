@@ -30,6 +30,10 @@ import eventRoutes from './Routes/events.route.js'
 import userRoutes from './Routes/users.route.js'
 import commentRoutes from './Routes/comments.route.js'
 import participantRoutes from './Routes/participants.route.js'
+import cronService from './Services/cron.service.js'
+
+cronService.testCron();
+console.log("Cron started");
 
 // Charge les variables du fichier .env dans process.env
 // Exemple dans .env : SERVER_PORT=3000

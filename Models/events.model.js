@@ -79,11 +79,20 @@ async function getByUserId(userId) {
     return rows;
 }
 
+async function getParticipantForEvent(){
+    const [rows] = await Db.query(`
+        select ev_title, ev_date, ev_location, us_email from participants
+        join users on participants.pa_user = users.us_id
+        join events on participants.pa_event = events.ev_id
+        WHERE ev_date = CURDATE() + INTERVAL 2 DAY`);
+    return rows;
+}
 export default {
     getAll,
     getById,
     insert,
     update,
     deleteevent,
-    getByUserId
+    getByUserId,
+    getParticipantForEvent
 }
