@@ -23,6 +23,8 @@ import userModel from '../Models/users.model.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import crypto from 'crypto';
+import mailService from '../Services/mail.service.js';
 dotenv.config()
 
 /*
@@ -108,7 +110,75 @@ async function login(req, res) {
     }
 }
 
+async function resetPassword(req,res) {
+    try {
+        const newPassword = req.body.newPassword;
+        const resetToken = req.body.resetToken;
+
+        if(!newPassword) {
+            return res.status(403).json({ error: "Nouveau mot de passe obligatoire" });
+        }
+
+        if(!resetToken) {
+            return res.status(403).json({ error: "Token de réinitialisation obligatoire" });
+        }
+
+        // on hash le token de réinitialisation
+        const hashTokenReset = crypto.createHash('sha256').update(resetToken).digest('binary');
+        // on cherche l'utilisateur par le token de réinitialisation
+        const user = await userModel.getByResetToken(hashTokenReset);
+
+        // si l'utilisateur n'est pas trouvé, on renvoie une erreur
+        if(!user) {
+            return res.status(403).json({ error: "Token de réinitialisation invalide" });
+        }
+
+        // on hash le nouveau mot de passe
+        const hashNewPassword = bcrypt.hashSync(newPassword, 10);
+        // on met à jour le mot de passe de l'utilisateur
+        await userModel.updatePassword(user.us_id, hashNewPassword);
+
+        res.json({ message: "Mot de passe réinitialisé avec succès" });
+        // on renvoie un message de succès
+    } catch (error) {
+        res.status(500).json({ error: "Une erreur est survenue lors de la réinitialisation du mot de passe !", error})
+    }
+}
+
+// Oublie de mot de passe ( route qui envoie un mail pour réinitialiser le mot de passe)
+async function forgotPassword(req,res) {
+
+    try {
+        const mail = req.body.mail;
+// on vérifie si l'email est obligatoire
+        if(!mail) {
+            return res.status(403).json({ error: "Email obligatoire" });
+        }
+// on cherche l'utilisateur par son email
+        const user = await userModel.getByMail(mail);
+
+        if(user) {
+            // on génère un token de réinitialisation
+            const resetToken = crypto.randomBytes(32).toString('hex');
+            // on hash le token de réinitialisation
+            const hashResetToken = crypto.createHash('sha256').update(resetToken).digest('binary');
+            // on définit la date d'expiration du token de réinitialisation
+            const expires = new Date(Date.now() + 1000 * 60 * 60 * 24);
+            // on met à jour le token de réinitialisation de l'utilisateur
+            await userModel.setResetToken(user.us_id, hashResetToken, expires);
+            // on envoie un mail de réinitialisation
+            await mailService.resetPassword(mail, resetToken);
+            res.json({ message: "Un email de réinitialisation a été envoyé" });
+        } else {
+            return res.status(403).json({ error: "Email non trouvé" });
+        }
+    } catch (error) {
+        res.status(500).json({ error: "Une erreur est survenue lors de la demande de réinitialisation du mot de passe !", error})
+    }
+}
 export default {
     register,
-    login
+    login,
+    resetPassword,
+    forgotPassword,
 }

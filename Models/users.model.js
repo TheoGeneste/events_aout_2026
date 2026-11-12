@@ -85,6 +85,34 @@ async function getByEventId(eventId) {
     return rows;
 }
 
+// Met à jour le token de réinitialisation d'un utilisateur
+async function setResetToken(id, resetToken, expires) {
+    const updated = await Db.query("UPDATE users set us_reset_token = ?, us_reset_expires = ? WHERE us_id = ?",
+        [resetToken, expires, id]);
+    return updated;
+}
+
+// Met à jour le mot de passe d'un utilisateur
+async function updatePassword(id, password) {
+    const updated = await Db.query("UPDATE users set us_password = ?, us_reset_token = NULL, us_reset_expires = NULL WHERE us_id = ?",
+        [password, id]);
+    return updated;
+}
+
+
+// Cherche un utilisateur par le token de réinitialisation
+async function getByResetToken(resetToken) {
+    const [rows] = await Db.query("SELECT us_id, us_username, us_email, us_reset_token, us_reset_expires FROM users WHERE us_reset_token = ?", [resetToken]);
+    return rows[0];
+}
+
+
+// Cherche un utilisateur par son email
+async function getByMail(mail) {
+    const [rows] = await Db.query("SELECT us_id, us_username, us_email, us_reset_token, us_reset_expires FROM users WHERE us_email = ?", [mail]);
+    return rows[0];
+}
+
 // On exporte un objet : le controller fait userModel.getAll(), userModel.insert(), etc.
 export default {
     getAll,
@@ -93,5 +121,9 @@ export default {
     deleteUser,
     insert,
     getByUsername,
-    getByEventId
+    getByEventId,
+    setResetToken,
+    updatePassword,
+    getByResetToken,
+    getByMail
 }

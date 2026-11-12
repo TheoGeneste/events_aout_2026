@@ -28,5 +28,11 @@ router.post('/register', authController.register);
 
 router.post('/login', authController.login);
 
+// route pour réinitialiser le mot de passe
+router.post('/reset-password', authController.resetPassword);
+
+// route pour oublier le mot de passe ( route qui envoie un mail pour réinitialiser le mot de passe)
+router.post('/forgot-password', authController.forgotPassword);
+
 // index.js importe ce router : import authRoutes from './Routes/auth.route.js'
 export default router;
