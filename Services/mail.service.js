@@ -28,6 +28,22 @@ const tranporter = nodemailer.createTransport({
     },
 });
 
+async function welcome(receverEmail){
+
+    const mail = await tranporter.sendMail({
+        from: process.env.MAIL_FROM,
+        to: receverEmail,
+        subject: 'Bienvenue sur notre plateforme',
+        text: `Bienvenue sur notre plateforme`,
+        html: `
+        <p>Bienvenue sur notre plateforme</p>
+        <a href="${process.env.FRONTEND_URL}/login">Se connecter</a>
+        `,
+    });
+
+    console.log("mail sent successfully");
+    return mail;
+}
 
 async function resetPassword(receverEmail, resetToken) {
 
@@ -57,4 +73,20 @@ async function resetPassword(receverEmail, resetToken) {
     return mail;
 }
 
-export default { resetPassword };
+async function eventConfirm(receverEmail, eventName, eventDate, eventLocation) {
+
+    console.log(receverEmail, eventName, eventDate, eventLocation);
+    const mail = await tranporter.sendMail({
+        from: process.env.MAIL_FROM,
+        to: receverEmail,
+        subject: 'Confirmation de votre inscription à l\'événement',
+        text: `Vous êtes inscrit à l'événement ${eventName} le ${eventDate} à ${eventLocation}`,
+        html: `
+        <p>Vous êtes inscrit à l'événement ${eventName} le ${eventDate} à ${eventLocation}</p>
+        `,
+    });
+
+    console.log("mail sent successfully");
+    return mail;
+}
+export default { resetPassword, welcome, eventConfirm };

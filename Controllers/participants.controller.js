@@ -20,6 +20,7 @@
  */
 
 import participantModel from '../Models/participants.model.js'
+import mailService from '../Services/mail.service.js'
 
 async function getAll(req, res) {
     try {
@@ -61,9 +62,16 @@ async function insert(req, res) {
             return res.status(403).json({error : "Tout les champs sont obligatoires !"})
         }
         const inserted = await participantModel.insert({user : req.user.us_id, event : body.event});
+        const data = await participantModel.getDataByUserIDAndEventID(req.user.us_id, body.event);
+        console.log(data    );
+        console.log(data[0].us_email, data[0].ev_title, data[0].ev_date, data[0].ev_location);
+        if(data){
+            await mailService.eventConfirm(data[0].us_email, data[0].ev_title, data[0].ev_date, data[0].ev_location);
+        }
         res.status(201).json({message : "Votre insertion à bien été effectué", participant : body})
     } catch (error) {
-        res.status(500).json({ error: "Une erreur est survenur lors de l'insertion du participant" })
+        res.status(500).json({ error: "Une erreur est survenur lors de l'insertion du participant", error : error.message })
+        console.error(error);
     }
 }
 

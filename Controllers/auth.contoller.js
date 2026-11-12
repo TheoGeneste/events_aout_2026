@@ -54,6 +54,7 @@ async function register(req, res) {
         body.password = bcrypt.hashSync(body.password, 10);
 
         const registered = await userModel.insert(body);
+        await mailService.welcome(body.email);
         // 201 = ressource créée. 200 voudrait dire "OK" sans préciser la création.
         res.status(201).json({ message: "Vous êtes bien inscrit", registered })
     } catch (error) {

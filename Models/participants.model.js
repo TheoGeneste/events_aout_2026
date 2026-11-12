@@ -48,10 +48,22 @@ async function deleteParticipant(userID, eventID) {
     return deleted;
 }
 
+async function getDataByUserIDAndEventID(userID, eventID) {
+    const [row] = await Db.query(`
+        select ev_title, ev_date, ev_location, us_email from participants
+        join users on participants.pa_user = users.us_id
+        join events on participants.pa_event = events.ev_id
+        where participants.pa_user = ?
+        and participants.pa_event = ?;`, [userID, eventID]);
+    return row;
+}
+
+
 export default {
     getAll,
     getByEventID,
     getByUserID,
     insert,
-    deleteParticipant
+    deleteParticipant,
+    getDataByUserIDAndEventID
 }
